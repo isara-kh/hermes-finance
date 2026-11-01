@@ -168,7 +168,7 @@
     const alp = s.alpaca;
     const hidden = Boolean(d.prefs.ui && d.prefs.ui.hide_plaid);
     const hideRow = srow('Hide bank sync (Plaid)', hidden ? 'Plaid is hidden: add accounts by hand and import files'
-      : 'Hides Sync now, the slot meter and Link a bank', sw(hidden, 'Hide bank sync (Plaid)',
+      : 'Hides Sync now, bank connections and Link a bank', sw(hidden, 'Hide bank sync (Plaid)',
       (on) => save({'ui.hide_plaid': on}, () => location.reload())));
     return card({cls: 'sc', title: 'Connections', icon: 'link', rgb: RGB.acc}, hideRow,
       hidden ? null : [srow('Plaid keys', s.plaid.set ? 'Stored locally' : 'Paste the two keys from your Plaid account',
@@ -196,7 +196,7 @@
         alp.set ? [h('button', {class: 'btn sm ghost', type: 'button', onclick: alpacaKey}, 'Replace'),
           h('button', {class: 'btn sm danger', type: 'button', onclick: alpacaRemove}, 'Remove')]
           : h('button', {class: 'btn sm', type: 'button', onclick: alpacaKey}, 'Connect'))),
-      h('div', {class: 'sfootl'}, HF.lnk('#/accounts', 'Banks and reconnects are on Accounts')));
+      hidden ? null : h('div', {class: 'sfootl'}, HF.lnk('#/accounts', 'Banks and reconnects are on Accounts')));
   }
 
   // ---- Access & security -------------------------------------------------------------------------------------------
@@ -546,7 +546,7 @@
       gh('Alert me when'),
       srow('A budget reaches 80%', null, sw(p.alerts.cap_80, 'A budget reaches 80%', (on) => save({'alerts.cap_80': on})), 'tight'),
       srow('A budget goes over its cap', null, sw(p.alerts.over_cap, 'A budget goes over its cap', (on) => save({'alerts.over_cap': on})), 'tight'),
-      srow('A bank connection breaks', null, sw(p.alerts.broken_connection, 'A bank connection breaks', (on) => save({'alerts.broken_connection': on})), 'tight'),
+      ('noPlaid' in document.body.dataset) ? null : srow('A bank connection breaks', null, sw(p.alerts.broken_connection, 'A bank connection breaks', (on) => save({'alerts.broken_connection': on})), 'tight'),
       h('p', {class: 'hint'}, 'Your Hermes jobs read these: ', h('span', {class: 'mono nw'}, 'finance settings --json')));
   }
 
