@@ -2031,7 +2031,7 @@
     // The note under "Net worth" says which total it is: "Custom" in Custom (redrawn with the flip), else as before.
     const nw = d.net_worth;
     $('nwn').textContent = NW.mode === 'custom' ? 'Custom'
-      : nw.manual.count ? 'incl. manual' : plural(banksOf(d).length, 'connection');   // (TASK-22f: Alpaca isn't a bank)
+      : nw.manual.count ? 'incl. manual' : ('noPlaid' in document.body.dataset) ? '' : plural(banksOf(d).length, 'connection');   // (TASK-22f: Alpaca isn't a bank)
     fill($('ssplit'), ownOwe(w));
     $('sas').textContent = `Own ${money(w.assets)}`;
     $('sli').textContent = `Owe ${money(w.debts)}`;
@@ -2044,7 +2044,7 @@
     const nw = d.net_worth;
     const banks = banksOf(d);
     renderSideWorth(d);
-    fill($('banks'), ...(banks.length ? banks.map((b, i) => bankRow(b, i === 0)) : [h('p', {class: 'nc'}, 'No banks connected yet.')]),
+    fill($('banks'), ...(banks.length ? banks.map((b, i) => bankRow(b, i === 0)) : [h('p', {class: 'nc'}, ('noPlaid' in document.body.dataset) ? (d.manual.length ? '' : 'No accounts yet.') : 'No banks connected yet.')]),
       d.manual.length ? manualRow(d.manual) : null);
     fill($('slots'), 'slots used: ', h('b', {}, `${d.slots_used} / ${d.slot_limit}`));
     const meter = $('meter');
@@ -2935,7 +2935,7 @@
         h('span', {}, h('b', {}, `${instShort(c.institution_name) || c.name} card`), ` · ${money2(c.amount)} minimum due `,
           k === 0 ? 'today' : k === 1 ? 'tomorrow' : `in ${k} days`)));
     }
-    if (!d.connections.broken) {  // TASK-22f: every connection (the Plaid banks and Alpaca), never "9 banks"
+    if (!d.connections.broken && !('noPlaid' in document.body.dataset)) {  // ui.hide_plaid: no connection line. TASK-22f: every connection (the Plaid banks and Alpaca), never "9 banks"
       const n = d.connections.total;
       items.push(h('a', {class: 'al ok', href: '#/accounts'}, ibadge('checkc', RGB.ok),
         h('span', {}, n ? `All ${plural(n, 'connection')} healthy` : 'No banks connected yet')));
@@ -4256,12 +4256,17 @@
       policyExcluded ? h('p', {class: 'nwnote'}, `${plural(policyExcluded, 'account')} excluded by the account policy, so not counted here`) : null,
       h('div', {class: 'nwprev'}, h('div', {class: 'nwpl'}, h('span', {}, 'Custom'), count), h('div', {'aria-live': 'polite'}, figure), bar, ownowe, transit),
       h('div', {class: 'nwpre'}, h('span', {}, 'Start from'), presets.map(([btn]) => btn)));
-    openSheet([head, h('div', {class: 'nwlist'}, sections.length ? sections : msgBox('No accounts yet', 'Connect a bank or add an account first.'))],
+    openSheet([head, h('div', {class: 'nwlist'}, sections.length ? sections : msgBox('No accounts yet', ('noPlaid' in document.body.dataset) ? 'Add an account first.' : 'Connect a bank or add an account first.'))],
       {cls: 'nwsheet', focus: sections.length ? sections[0].querySelector('.nwgt') : null, onClose: persist});
     sync();
   }
 
   function connectionsCard(d) {
+    if (('noPlaid' in document.body.dataset)) {  // ui.hide_plaid: no bank connections, just a way to add accounts by hand
+      return card({title: 'Add accounts', icon: 'plus', rgb: RGB.acc},
+        h('div', {class: 'mut', style: {'font-size': '14px'}}, 'Banks, cards, loans and more, added by hand. Import statements to fill them.'),
+        h('button', {class: 'cbtn', type: 'button', style: {'margin-top': '18px'}, dataset: {add: 'home'}}, icon('plus'), 'Add account'));
+    }
     const active = d.items.filter((it) => !it.removed_at);
     const broken = active.filter((it) => it.status !== 'active' || it.error_code);
     const removed = d.items.filter((it) => it.removed_at);
