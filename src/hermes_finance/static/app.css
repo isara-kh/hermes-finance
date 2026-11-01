@@ -1267,3 +1267,7 @@ dl.vd-kv.one > div:nth-child(2) { border-top: 1px solid var(--line); }
   .acctgrp > h3 { --acct-header-row: 44px; }
   .gfold { width: 44px; height: 44px; margin-right: -8px; }
 }
+
+/* ui.hide_plaid: the Plaid parts of the shell (prefs.py) */
+body[data-no-plaid] .foot .slots, body[data-no-plaid] #meter, body[data-no-plaid] .foot .nc.warn,
+body[data-no-plaid] #syncnow, body[data-no-plaid] #syncbox, body[data-no-plaid] .ttlw .syncst { display: none !important; }
