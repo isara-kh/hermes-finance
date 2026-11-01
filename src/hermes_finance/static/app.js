@@ -2235,8 +2235,8 @@
     if (step === 'home') {
       openSheet([h('div', {class: 'shd'}, h('h2', {id: 'sheet-title'}, 'Add account'), closeBtn()),
         h('div', {class: 'opts'},
-          opt('link', RGB.acc, 'Link a bank or card', full ? `All ${limit} connections are used` : 'Connect securely with Plaid',
-            () => openAdd('plaid'), meter),
+          'noPlaid' in document.body.dataset ? null : opt('link', RGB.acc, 'Link a bank or card',
+            full ? `All ${limit} connections are used` : 'Connect securely with Plaid', () => openAdd('plaid'), meter),
           opt('house', RGB.purple, 'Add a property', "Track your home's value", () => openAdd('form:property')),
           opt('car', RGB.cyan, 'Add a vehicle', "Track your car's value", () => openAdd('form:car')),
           opt('pencil', RGB.warn, 'Add manually', "Loans, cards and accounts Plaid can't reach", () => openAdd('manual')),

@@ -540,9 +540,9 @@ class App:
     def page(self, tailnet: bool = False, csrf: str | None = None) -> str:
         with self._conn() as conn:
             s = report.status(conn)
-            v = prefs.get_many(conn, ["appearance.theme", "region.currency", "region.locale"])
+            v = prefs.get_many(conn, ["appearance.theme", "region.currency", "region.locale", "ui.hide_plaid"])
             shell = {"csrf": csrf, "theme": v["appearance.theme"], "setup": admin.needs_setup(conn), "signed_in": csrf is not None,
-                     "currency": v["region.currency"], "locale": v["region.locale"],
+                     "currency": v["region.currency"], "locale": v["region.locale"], "no_plaid": v["ui.hide_plaid"],
                      "ask": chat.brain(conn)}   # TASK-23: the Ask button (none with AI off) and its brain chip
         return redact.scrub(render_page(s, tailnet, shell))
 
@@ -747,6 +747,9 @@ def render_page(s: dict[str, Any], tailnet: bool = False, shell: dict[str, Any] 
         f' data-locale="{_e(shell["locale"])}"' if shell.get("locale") else "")
     csrf = f'\n<meta name="csrf-token" content="{_e(shell["csrf"])}">' if shell.get("csrf") else ""
     body_flags = (" data-setup" if shell.get("setup") else "") + (" data-signed-in" if shell.get("signed_in") else "")
+    no_plaid = bool(shell.get("no_plaid"))
+    if no_plaid:   # ui.hide_plaid: app.css hides the Plaid parts; Plaid Link's script isn't loaded at all
+        body_flags += " data-no-plaid"
     ask = shell.get("ask") or {}
     if ask.get("mode") in ("api", "hermes"):   # TASK-23: chat.js draws the Ask button and panel from these
         body_flags += f' data-ask="{_e(ask["mode"])}" data-ask-brain="{_e(ask["label"])}"'
@@ -788,7 +791,7 @@ def render_page(s: dict[str, Any], tailnet: bool = False, shell: dict[str, Any] 
 <link rel="stylesheet" href="/static/settings.css">
 <link rel="stylesheet" href="/static/light.css">
 <link rel="stylesheet" href="/static/tap.css">
-<script src="{PLAID_LINK_JS}" async></script>
+{'' if no_plaid else f'<script src="{PLAID_LINK_JS}" async></script>'}
 <script src="/static/vendor/chart.umd.min.js" defer></script>
 <script src="/static/login.js" defer></script>
 <script src="/static/settings.js" defer></script>

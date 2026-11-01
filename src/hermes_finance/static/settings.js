@@ -166,8 +166,12 @@
     const keys = s.plaid.set ? pill('sm', 'check', 'Set') : pill('sm bad', 'alert', 'Missing');
     const env = s.plaid.env || 'production';
     const alp = s.alpaca;
-    return card({cls: 'sc', title: 'Connections', icon: 'link', rgb: RGB.acc},
-      srow('Plaid keys', s.plaid.set ? 'Stored locally' : 'Paste the two keys from your Plaid account',
+    const hidden = Boolean(d.prefs.ui && d.prefs.ui.hide_plaid);
+    const hideRow = srow('Hide bank sync (Plaid)', hidden ? 'Plaid is hidden: add accounts by hand and import files'
+      : 'Hides Sync now, the slot meter and Link a bank', sw(hidden, 'Hide bank sync (Plaid)',
+      (on) => save({'ui.hide_plaid': on}, () => location.reload())));
+    return card({cls: 'sc', title: 'Connections', icon: 'link', rgb: RGB.acc}, hideRow,
+      hidden ? null : [srow('Plaid keys', s.plaid.set ? 'Stored locally' : 'Paste the two keys from your Plaid account',
         h('span', {class: 'pairc'}, keys, h('button', {class: 'btn sm ghost', type: 'button', onclick: () => replaceKeys(env)}, 'Replace keys'))),
       srow('Plaid environment', p.demo ? 'Sandbox demo: fake banks and data. Nothing real is connected.' : 'Real banks / Demo',
         seg([['production', 'Production'], ['sandbox', 'Sandbox']], env, 'Plaid environment', (k) => replaceKeys(k))),
@@ -185,7 +189,7 @@
       seg([['trial', 'Trial'], ['paid', 'Paid']], p.refresh.plan, 'Plaid plan', (k) => save({'plaid.plan': k}, reload))),
       srow('Allow on-demand bank refresh', p.refresh.plan === 'paid' ? 'Plaid bills each refresh request on paid plans. Off unless you turn it on.'
         : 'Adds Refresh',
-      sw(p.refresh.allowed, 'Allow on-demand bank refresh', (on) => save({'plaid.on_demand_refresh': on}, reload))),
+      sw(p.refresh.allowed, 'Allow on-demand bank refresh', (on) => save({'plaid.on_demand_refresh': on}, reload)))],
       h('div', {class: 'srow'}, HF.ia('Alpaca', '', null, 'ins_hf_alpaca'), h('span', {class: 'grow'}, h('b', {}, 'Alpaca'),
         h('span', {}, alp.set ? 'Read-only' :'Brokerage balance and positions, read-only \u00b7 uses no Plaid slot')),
       h('span', {class: 'pairc'}, alp.set ? pill('sm', 'check', 'Live') : pill('sm nt', null, 'Not configured'),

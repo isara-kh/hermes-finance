@@ -13,6 +13,8 @@ default) and `save()` validates everything before writing anything. Who reads wh
   region.*                   the page's number / date formatting (Intl.NumberFormat); week_start for the bills
                              calendar; budget_month_start is day 1 only for now (budget math is calendar months)
   appearance.theme           the page's theme (dark / light / system)
+  ui.hide_plaid              hide Plaid bank sync on the page (Sync now, slot meter, Link a bank, Plaid settings rows);
+                             also skips loading Plaid Link's script. Data and code paths are untouched
   access.*                   access.py (the three access modes)
   plaid.plan                 TASK-22: trial | paid (Plaid has no API for it); plaid.on_demand_refresh: whether "Ask banks
                              for fresh data" may call Plaid's refresh endpoints (unset: on in Sandbox or on Trial,
@@ -162,6 +164,7 @@ SPEC: dict[str, Pref] = {
     "region.week_start": Pref("sun", _choice(("sun", "mon"))),
     "region.budget_month_start": Pref(1, _choice((1,))),   # v1: calendar months only
     "appearance.theme": Pref("dark", _choice(("dark", "light", "system"))),
+    "ui.hide_plaid": Pref(False, _bool),   # hide Plaid bank sync in the UI (no Plaid Link script, no Sync now / slots)
     # access.py owns these (validated again there, against each other, before a mode can be chosen) and shows them
     # itself: the identities only masked
     "access.mode": Pref(None, _choice(ACCESS_MODES), public=False),
