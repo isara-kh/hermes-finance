@@ -42,6 +42,7 @@ def test_money_uses_whole_dollars_cents_ascii_signs_and_rounded_zero():
 @pytest.mark.parametrize("locale,currency,expected", [
     ("de-DE", "EUR", ["12\u00a0€", "-12,50\u00a0€", "0\u00a0€"]),
     ("ja-JP", "JPY", ["￥12", "-￥13", "￥0"]),
+    ("th-TH", "THB", ["฿12", "-฿12.50", "฿0"]),
     ("en-US", "KWD", ["KWD\u00a012", "-KWD\u00a012.500", "KWD\u00a00"]),
 ])
 def test_currency_position_precision_and_hero_match(locale, currency, expected):
