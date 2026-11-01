@@ -34,9 +34,9 @@ from .db import now
 DAYS = ("sun", "mon", "tue", "wed", "thu", "fri", "sat")
 # ISO 4217 codes offered in Settings (display only: amounts are never converted)
 CURRENCIES = ("USD", "EUR", "GBP", "CAD", "AUD", "NZD", "CHF", "JPY", "SEK", "NOK", "DKK", "PLN", "CZK", "MXN", "BRL",
-              "INR", "SGD", "HKD", "ZAR", "ILS", "KRW", "TRY", "UAH")
+              "INR", "SGD", "HKD", "ZAR", "ILS", "KRW", "TRY", "UAH", "THB")
 LOCALES = ("en-US", "en-GB", "en-CA", "en-AU", "en-IN", "de-DE", "fr-FR", "es-ES", "es-MX", "it-IT", "nl-NL", "pt-BR",
-           "pl-PL", "sv-SE", "ja-JP", "uk-UA")
+           "pl-PL", "sv-SE", "ja-JP", "uk-UA", "th-TH")
 AI_PRESETS = {"openrouter": "https://openrouter.ai/api/v1", "openai": "https://api.openai.com/v1",
               "local": "http://127.0.0.1:11434/v1", "custom": ""}
 ACCESS_MODES = ("local", "proxy", "builtin")

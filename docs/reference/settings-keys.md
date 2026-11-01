@@ -53,9 +53,9 @@ Every setting the app stores, one JSON value per key in the database's `settings
 
 ## Region
 
-Currencies (display only: amounts are never converted): `USD`, `EUR`, `GBP`, `CAD`, `AUD`, `NZD`, `CHF`, `JPY`, `SEK`, `NOK`, `DKK`, `PLN`, `CZK`, `MXN`, `BRL`, `INR`, `SGD`, `HKD`, `ZAR`, `ILS`, `KRW`, `TRY`, `UAH`.
+Currencies (display only: amounts are never converted): `USD`, `EUR`, `GBP`, `CAD`, `AUD`, `NZD`, `CHF`, `JPY`, `SEK`, `NOK`, `DKK`, `PLN`, `CZK`, `MXN`, `BRL`, `INR`, `SGD`, `HKD`, `ZAR`, `ILS`, `KRW`, `TRY`, `UAH`, `THB`.
 
-Locales: `en-US`, `en-GB`, `en-CA`, `en-AU`, `en-IN`, `de-DE`, `fr-FR`, `es-ES`, `es-MX`, `it-IT`, `nl-NL`, `pt-BR`, `pl-PL`, `sv-SE`, `ja-JP`, `uk-UA`.
+Locales: `en-US`, `en-GB`, `en-CA`, `en-AU`, `en-IN`, `de-DE`, `fr-FR`, `es-ES`, `es-MX`, `it-IT`, `nl-NL`, `pt-BR`, `pl-PL`, `sv-SE`, `ja-JP`, `uk-UA`, `th-TH`.
 
 ## Valuation sources
 
