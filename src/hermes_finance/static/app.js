@@ -4262,7 +4262,9 @@
   }
 
   function connectionsCard(d) {
-    if (('noPlaid' in document.body.dataset)) {  // ui.hide_plaid: no bank connections, just a way to add accounts by hand
+    // ui.hide_plaid: no bank connections, just a way to add accounts by hand. typeof guard: the unit test runs this
+    // function alone under node, where there is no document.
+    if (typeof document !== 'undefined' && 'noPlaid' in document.body.dataset) {
       return card({title: 'Add accounts', icon: 'plus', rgb: RGB.acc},
         h('div', {class: 'mut', style: {'font-size': '14px'}}, 'Banks, cards, loans and more, added by hand. Import statements to fill them.'),
         h('button', {class: 'cbtn', type: 'button', style: {'margin-top': '18px'}, dataset: {add: 'home'}}, icon('plus'), 'Add account'));
